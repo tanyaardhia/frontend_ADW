@@ -1,12 +1,27 @@
 "use client";
+
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    router.push('/login');
   };
 
   return (
@@ -17,8 +32,8 @@ export default function Navbar() {
             <div className="flex items-center justify-between">
               <button>
                 <div className="flex items-center space-x-2">
-                  <h2 className="text-black uppercase dark:text-white font-bold text-2xl">
-                    <Link href="/">Listify</Link>
+                  <h2 className="text-black dark:text-white font-bold text-2xl">
+                    <Link href="/">iProc</Link>
                   </h2>
                 </div>
               </button>
@@ -35,9 +50,18 @@ export default function Navbar() {
               </div>
 
               <div className="hidden lg:flex lg:items-center gap-x-2">
-                <button className="flex items-center justify-center rounded-md bg-[#5B99C2] text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200">
-                  <Link href="/login">Login</Link>
-                </button>
+                {isLoggedIn ? (
+                  <button
+                    className="flex items-center justify-center rounded-md bg-red-600 text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button className="flex items-center justify-center rounded-md bg-[#5B99C2] text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200">
+                    <Link href="/login">Login</Link>
+                  </button>
+                )}
               </div>
 
               <div className="flex items-center justify-center lg:hidden">
@@ -76,9 +100,18 @@ export default function Navbar() {
                     <Link href="/dashboard">Dashboard</Link>
                   </li>
                   <li>
-                    <button className="block w-full text-left rounded-md bg-[#5B99C2] text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200">
-                      <Link href="/login">Login</Link>
-                    </button>
+                    {isLoggedIn ? (
+                      <button
+                        className="block w-full text-left rounded-md bg-red-600 text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    ) : (
+                      <button className="block w-full text-left rounded-md bg-[#5B99C2] text-white px-6 py-2.5 font-semibold hover:shadow-lg hover:drop-shadow transition duration-200">
+                        <Link href="/login">Login</Link>
+                      </button>
+                    )}
                   </li>
                 </ul>
               </div>
