@@ -3,7 +3,6 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CardUserDetail from "@/components/cardUserDetail";
-import Navbar from "@/components/navbar";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -37,7 +36,6 @@ export default function UserDetails() {
 
   return (
     <div>
-      <Navbar />
       <section className="w-full overflow-hidden dark:bg-gray-900">
         <div className="flex flex-col">
           {/* cover image */}

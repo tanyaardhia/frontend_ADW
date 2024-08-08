@@ -1,27 +1,47 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function CardUserDetail({ user }) {
+  const router = useRouter(); 
+
+  const handleGoBack = () => {
+    if (router) {
+      router.back();
+    } else {
+      console.error("Router is not defined");
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6">
-      <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 md:text-lg sm:text-lg lg:text-xl">
-          {user.firstName} {user.lastName}
-        </h1>
-        <button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 -mt-3.5 ml-2"
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center mb-4 md:mb-0">
+          <button
+            onClick={handleGoBack}
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-            />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="w-5 h-5 mr-3"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <h1 className="text-xl font-semibold text-gray-800 dark:text-white md:text-lg lg:text-xl">
+            {user.firstName} {user.lastName}
+          </h1>
+        </div>
+
+        <button className="ml-0 md:ml-4">
+          <p className="text-blue-500 hover:text-blue-700">Edit</p>
         </button>
       </div>
 
