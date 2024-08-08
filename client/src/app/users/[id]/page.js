@@ -37,7 +37,7 @@ export default function UserDetails() {
 
   return (
     <div>
-      {/* <Navbar /> */}
+      <Navbar />
       <section className="w-full overflow-hidden dark:bg-gray-900">
         <div className="flex flex-col">
           {/* cover image */}
