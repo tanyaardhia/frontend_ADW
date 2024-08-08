@@ -21,7 +21,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     setIsLoggedIn(false);
-    router.push("/login");
+    router.push("/");
   };
 
   return (
