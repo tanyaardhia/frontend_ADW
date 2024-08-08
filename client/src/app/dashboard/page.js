@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -9,6 +10,8 @@ export default function Dashboard() {
     key: "username",
     direction: "asc",
   });
+
+  const router = useRouter();
 
   const fetchData = async () => {
     try {
@@ -179,7 +182,7 @@ export default function Dashboard() {
                 <td className="py-3 px-6 text-center">
                   <button
                     className="bg-[#134B70] text-white py-2 px-4 rounded hover:bg-[#508C9B]"
-                    onClick={() => console.log("see detail", user)}
+                    onClick={() => router.push(`/users/${user.id}`)}
                   >
                     See
                   </button>
