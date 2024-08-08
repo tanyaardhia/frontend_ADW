@@ -33,7 +33,7 @@ export default function Navbar() {
               <button>
                 <div className="flex items-center space-x-2">
                   <h2 className="text-black dark:text-white font-bold text-2xl">
-                    <Link href="/">iProc</Link>
+                    <Link href="/dashboard">iProc</Link>
                   </h2>
                 </div>
               </button>
