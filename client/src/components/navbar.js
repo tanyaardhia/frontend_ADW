@@ -10,7 +10,7 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     setIsLoggedIn(!!token);
   }, []);
 
@@ -19,9 +19,9 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("authToken");
     setIsLoggedIn(false);
-    router.push('/login');
+    router.push("/login");
   };
 
   return (
@@ -40,9 +40,6 @@ export default function Navbar() {
 
               <div className="hidden lg:block">
                 <ul className="flex space-x-10 text-base font-bold text-black/60 dark:text-white">
-                  <li className="hover:underline hover:underline-offset-4 hover:w-fit transition-all duration-100 ease-linear">
-                    <Link href="/">Home</Link>
-                  </li>
                   <li className="hover:underline hover:underline-offset-4 hover:w-fit transition-all duration-100 ease-linear">
                     <Link href="/dashboard">Dashboard</Link>
                   </li>
@@ -93,9 +90,6 @@ export default function Navbar() {
             {isOpen && (
               <div className="lg:hidden mt-2">
                 <ul className="flex flex-col space-y-2 text-base font-bold text-black/60 dark:text-white">
-                  <li className="hover:underline hover:underline-offset-4 hover:w-fit transition-all duration-100 ease-linear">
-                    <Link href="/">Home</Link>
-                  </li>
                   <li className="hover:underline hover:underline-offset-4 hover:w-fit transition-all duration-100 ease-linear">
                     <Link href="/dashboard">Dashboard</Link>
                   </li>
