@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
 
@@ -16,7 +15,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div>
-          <Navbar />
           {children}
           <ToastContainer />
         </div>

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/navbar";
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -118,6 +119,8 @@ export default function Dashboard() {
   };
 
   return (
+    <div>
+    {/* <Navbar/> */}
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mb-6">
         <h2 className="text-2xl font-bold mb-4 md:mb-0">Users List</h2>
@@ -230,5 +233,7 @@ export default function Dashboard() {
         </div>
       )}
     </div>
+    </div>
+
   );
 }
