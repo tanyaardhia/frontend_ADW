@@ -7,22 +7,27 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sorting, setSorting] = useState({
-    key: "username",
+    key: "",
     direction: "asc",
   });
 
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const responseUsers = await axios.get("https://dummyjson.com/users");
       setUsers(responseUsers.data.users);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSearch = async (term) => {
+    setLoading(true);
     try {
       const responseSearch = await axios.get(
         `https://dummyjson.com/users/search?q=${term}`
@@ -30,6 +35,8 @@ export default function Dashboard() {
       setUsers(responseSearch.data.users);
     } catch (error) {
       console.error("Error searching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,84 +121,114 @@ export default function Dashboard() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mb-6">
         <h2 className="text-2xl font-bold mb-4 md:mb-0">Users List</h2>
-        <input
-          type="text"
-          className="border border-stone-400 rounded py-2 px-4 placeholder:text-sm focus:scale-105 ease-in-out duration-300"
-          placeholder="searching users"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            className="border border-stone-400 rounded py-2 px-4 placeholder:text-sm focus:scale-105 ease-in-out duration-300 pr-10"
+            placeholder="searching users"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => setSearchTerm("")}
+              className="absolute inset-y-0 right-0 flex items-center pr-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 text-gray-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
-      <div className="overflow-x-auto w-full max-w-4xl">
-        <table className="min-w-full bg-white border border-gray-300 rounded-xl">
-          <thead>
-            <tr className="bg-[#a6bacd] text-black uppercase text-sm leading-normal">
-              <th
-                className="py-3 px-6 text-left cursor-pointer"
-                onClick={() => handleSort("username")}
-              >
-                <span className="flex items-center">
-                  Username
-                  {getSortIcon("username")}
-                </span>
-              </th>
-              <th
-                className="py-3 px-6 text-left cursor-pointer"
-                onClick={() => handleSort("password")}
-              >
-                <span className="flex items-center">
-                  Password
-                  {getSortIcon("password")}
-                </span>
-              </th>
-              <th
-                className="py-3 px-6 text-left cursor-pointer"
-                onClick={() => handleSort("age")}
-              >
-                <span className="flex items-center">
-                  Usia
-                  {getSortIcon("age")}
-                </span>
-              </th>
-              <th
-                className="py-3 px-6 text-left cursor-pointer"
-                onClick={() => handleSort("firstName")}
-              >
-                <span className="flex items-center">
-                  Name
-                  {getSortIcon("firstName")}
-                </span>
-              </th>
-              <th className="py-3 px-6 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-sm font-light">
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b border-gray-200 hover:bg-gray-100"
-              >
-                <td className="font-medium text-gray-900 whitespace-nowrap dark:text-white py-3 px-6 text-left">
-                  {user.username}
-                </td>
-                <td className="py-3 px-6 text-left">{user.password}</td>
-                <td className="py-3 px-6 text-left">{user.age}</td>
-                <td className="py-3 px-6 text-left">
-                  {user.firstName} {user.lastName}
-                </td>
-                <td className="py-3 px-6 text-center">
-                  <button
-                    className="bg-[#134B70] text-white py-2 px-4 rounded hover:bg-[#508C9B]"
-                    onClick={() => router.push(`/users/${user.id}`)}
-                  >
-                    See
-                  </button>
-                </td>
+      {loading ? (
+        <div className="flex items-center justify-center h-screen">
+          <span className="loading loading-spinner text-neutral"></span>
+        </div>
+      ) : (
+        <div className="overflow-x-auto w-full max-w-4xl">
+          <table className="min-w-full bg-white border border-gray-300 rounded-xl">
+            <thead>
+              <tr className="bg-[#a6bacd] text-black uppercase text-sm leading-normal">
+                <th
+                  className="py-3 px-6 text-left cursor-pointer"
+                  onClick={() => handleSort("username")}
+                >
+                  <span className="flex items-center">
+                    Username
+                    {getSortIcon("username")}
+                  </span>
+                </th>
+                <th
+                  className="py-3 px-6 text-left cursor-pointer"
+                  onClick={() => handleSort("password")}
+                >
+                  <span className="flex items-center">
+                    Password
+                    {getSortIcon("password")}
+                  </span>
+                </th>
+                <th
+                  className="py-3 px-6 text-left cursor-pointer"
+                  onClick={() => handleSort("age")}
+                >
+                  <span className="flex items-center">
+                    Usia
+                    {getSortIcon("age")}
+                  </span>
+                </th>
+                <th
+                  className="py-3 px-6 text-left cursor-pointer"
+                  onClick={() => handleSort("firstName")}
+                >
+                  <span className="flex items-center">
+                    Name
+                    {getSortIcon("firstName")}
+                  </span>
+                </th>
+                <th className="py-3 px-6 text-center">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="text-gray-600 text-sm font-light">
+              {users.map((user) => (
+                <tr
+                  key={user.id}
+                  className="border-b border-gray-200 hover:bg-gray-100"
+                >
+                  <td className="font-medium text-gray-900 whitespace-nowrap dark:text-white py-3 px-6 text-left">
+                    {user.username}
+                  </td>
+                  <td className="py-3 px-6 text-left">{user.password}</td>
+                  <td className="py-3 px-6 text-left">{user.age}</td>
+                  <td className="py-3 px-6 text-left">
+                    {user.firstName} {user.lastName}
+                  </td>
+                  <td className="py-3 px-6 text-center">
+                    <button
+                      className="bg-[#134B70] text-white py-2 px-4 rounded hover:bg-[#508C9B]"
+                      onClick={() => router.push(`/users/${user.id}`)}
+                    >
+                      See
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
