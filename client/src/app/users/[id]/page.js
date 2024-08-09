@@ -6,9 +6,13 @@ import CardUserDetail from "@/components/cardUserDetail";
 
 export default function UserDetails() {
   const { id } = useParams();
+  console.log(id, 'UserDetails');
+  
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    console.log(id, ">>> id dari useParams");
+
     if (id) {
       const fetchUser = async () => {
         try {
@@ -55,7 +59,7 @@ export default function UserDetails() {
           </div>
 
           {/* user details */}
-          <CardUserDetail user={user} />
+          <CardUserDetail id={id} user={user} />
         </div>
       </section>
     </div>

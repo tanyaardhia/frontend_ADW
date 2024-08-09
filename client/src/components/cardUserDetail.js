@@ -1,14 +1,19 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-export default function CardUserDetail({ user }) {
-  const router = useRouter(); 
+export default function CardUserDetail({ id, user }) {
+  const router = useRouter();
+  console.log(id, "card detail ");
+
+  const handleEdit = () => {
+    router.push(`/users-update/${id}`);
+  };
 
   const handleGoBack = () => {
     if (router) {
       router.back();
     } else {
-      console.error("Router is not defined");
+      console.error("router is not defined");
     }
   };
 
@@ -24,13 +29,13 @@ export default function CardUserDetail({ user }) {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="w-5 h-5 mr-3"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M15 19l-7-7 7-7"
               />
             </svg>
@@ -40,7 +45,7 @@ export default function CardUserDetail({ user }) {
           </h1>
         </div>
 
-        <button className="ml-0 md:ml-4">
+        <button className="ml-0 md:ml-4" onClick={handleEdit}>
           <p className="text-blue-500 hover:text-blue-700">Edit</p>
         </button>
       </div>
