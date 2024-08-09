@@ -28,7 +28,7 @@ export default function Login() {
       console.log(responLogin.data.token, ">> token login");
     } catch (error) {
       console.log(error, "<< error login");
-      alert("Login failed!");
+      // alert("Login failed!");
       toast.error("Login failed!");
     }
   };
