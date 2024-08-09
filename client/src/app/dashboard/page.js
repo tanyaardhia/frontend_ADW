@@ -15,7 +15,7 @@ export default function Dashboard() {
     direction: "asc",
   });
 
-  const router = useRouter()
+  const router = useRouter();
   const fetchData = async (search, sortColumn, sorting) => {
     try {
       const response = await axios.get("https://dummyjson.com/users/search", {
@@ -111,6 +111,15 @@ export default function Dashboard() {
     console.log("ke add user");
     router.push("/users-add");
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      console.log("ke login");
+      router.push("/login");
+    }
+  }, [router]);
 
   if (isLoading)
     return (

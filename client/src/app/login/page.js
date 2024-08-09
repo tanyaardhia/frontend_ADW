@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -31,6 +32,14 @@ export default function Login() {
       toast.error("Login failed!");
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
