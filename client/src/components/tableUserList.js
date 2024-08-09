@@ -66,7 +66,7 @@ const TableUserList = ({
         </tr>
       </thead>
       <tbody>
-        {data?.users.map((user) => (
+        {(data?.users || []).map((user) => (
           <tr
             key={user.id}
             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"

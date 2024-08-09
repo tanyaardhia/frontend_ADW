@@ -2,16 +2,9 @@
 
 import React from "react";
 
-export default function Form({
-  onSubmit,
-  loading,
-  mode = "add",
-  register,
-  handleSubmit,
-  userData,
-}) {
+export default function Form({ onSubmit, loading, mode = "add", register }) {
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4">
       {/* First Name */}
       <div>
         <label className="block text-xs font-medium text-gray-700">

@@ -22,11 +22,11 @@ export default function Edit() {
 
   const updateUser = async ({ id, data }) => {
     console.log(id, "id editt");
-    console.log("sebelum update data>>> ", data);
+    console.log("sebelum update dataaa >>> ", data);
 
     const response = await axios.put(`https://dummyjson.com/users/${id}`, data);
     console.log(response, "dataa edit 222");
-    console.log("sesudah update >", response.data);
+    console.log("sesudah updateeee >", response.data);
 
     return response.data;
   };
@@ -40,14 +40,10 @@ export default function Edit() {
     },
   });
 
-  const { data, isLoading } = useQuery(
-    ["user", id],
-    () => fetchUser(id),
-    {
-      enabled: !!id,
-      onError: () => toast.error("Failed to fetch user data."),
-    }
-  );
+  const { data, isLoading } = useQuery(["user", id], () => fetchUser(id), {
+    enabled: !!id,
+    onError: () => toast.error("Failed to fetch user data."),
+  });
 
   const mutation = useMutation((data) => updateUser({ id, data }), {
     onSuccess: () => {
@@ -62,7 +58,12 @@ export default function Edit() {
 
   useEffect(() => {
     if (data) {
-      reset(data);
+      reset({
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        age: data.age || "",
+        gender: data.gender || "",
+      });
     }
   }, [data, reset]);
 
@@ -78,12 +79,11 @@ export default function Edit() {
       <h2 className="text-2xl font-bold mb-4 text-center">Edit User</h2>
       <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
         <Form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           register={register}
           handleSubmit={handleSubmit}
           loading={mutation.isLoading}
           mode="edit"
-          userData={data}
         />
       </div>
     </div>

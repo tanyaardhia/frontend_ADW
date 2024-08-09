@@ -1,52 +1,44 @@
 "use client";
 
-import axios from "axios";
-import { useQuery } from "react-query";
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import TableUserList from "@/components/tableUserList";
 import Sidebar from "@/components/sidebar";
 import { useRouter } from "next/navigation";
+import { fetchUsers } from "@/features/userThunk";
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortColumn, setSortColumn] = useState();
-  const [sorting, setSorting] = useState({
-    key: "",
-    direction: "asc",
-  });
+  const [sortColumn, setSortColumn] = useState("");
+  const [sorting, setSorting] = useState({ key: "", direction: "asc" });
 
+  const dispatch = useDispatch();
   const router = useRouter();
-  const fetchData = async (search, sortColumn, sorting) => {
-    try {
-      const response = await axios.get("https://dummyjson.com/users/search", {
-        params: {
-          q: search,
-          sortBy: sortColumn,
-          sortOrder: sorting,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-  const { data, error, isLoading, refetch } = useQuery(
-    ["users", searchTerm, sortColumn, sorting],
-    () => fetchData(searchTerm, sortColumn, sorting),
-    {
-      keepPreviousData: true,
-    }
-  );
+  const { users, loading: status, error } = useSelector((state) => state.users);
 
   useEffect(() => {
-    refetch();
-  }, [searchTerm, sortColumn, sorting, refetch]);
+    console.log("dispatching >>", {
+      q: searchTerm,
+      sortBy: sortColumn,
+      sortOrder: sorting.direction,
+    });
+    dispatch(
+      fetchUsers({
+        q: searchTerm,
+        sortBy: sortColumn,
+        sortOrder: sorting.direction,
+      })
+    );
+  }, [searchTerm, sortColumn, sorting, dispatch]);
+
+  console.log("state>>", { users, status, error });
 
   const handleSort = (column) => {
     if (sortColumn === column) {
-      setSorting((prev) => (prev.direction === "asc" ? "desc" : "asc"));
+      setSorting((prev) => ({
+        key: column,
+        direction: prev.direction === "asc" ? "desc" : "asc",
+      }));
     } else {
       setSortColumn(column);
       setSorting({ key: column, direction: "asc" });
@@ -114,27 +106,25 @@ export default function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
     if (!token) {
       console.log("ke login");
       router.push("/login");
     }
   }, [router]);
 
-  if (isLoading)
+  if (status === "loading")
     return (
       <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-spinner text-neutral"></span>
       </div>
     );
 
-  if (error) return <div>An error occurred: {error.message}</div>;
+  if (status === "failed") return <div>An error occurred: {error}</div>;
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex-1 p-4 ml-64 mr-10 my-10">
-        {" "}
         <div className="flex flex-col md:flex-row items-center md:justify-between pb-4 bg-white dark:bg-gray-900">
           <h1 className="text-xl font-bold mb-4 md:mb-0">Users List</h1>
 
@@ -177,40 +167,18 @@ export default function Dashboard() {
               <input
                 type="text"
                 id="table-search-users"
-                className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full md:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block p-2.5 ps-10 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search for users"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              {searchTerm && (
-                <button
-                  type="button"
-                  className="absolute inset-y-0 end-0 flex items-center pe-3"
-                  onClick={() => setSearchTerm("")}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              )}
             </div>
           </div>
         </div>
+
         <TableUserList
-          data={data}
-          sortColumn={sortColumn}
-          sorting={sorting.direction}
+          data={users}
+          sorting={sorting}
           handleSort={handleSort}
           getSortIcon={getSortIcon}
         />
